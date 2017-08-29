@@ -55,33 +55,11 @@ namespace Breakout
                     // Create new instance of the block
                     GameObject block = GetRandomBlock();
                     // Set the new position
-                    Vector3 pos = new Vector3(x, y, 0);
+                    Vector2 pos = new Vector2(x * spacing.x, y * spacing.y);
                     block.transform.position = pos;
                     // Add block to 2D array
                     spawnedBlocks[x, y] = block;
                 }
-            }
-        }
-
-        void UpdateBlocks()
-        {
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    Vector2 pos = new Vector2(x * spacing.x, y * spacing.y);
-                    GameObject currentBlock = spawnedBlocks[x, y];
-                    currentBlock.transform.position = pos;
-                }
-            }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (isDebugging)
-            {
-                UpdateBlocks();
             }
         }
     }

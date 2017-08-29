@@ -8,10 +8,10 @@ namespace Breakout
     public class Ball : MonoBehaviour
     {
         public float speed = 20f; // Speed at which the ball travels
-        public Text countText;
+        public Text scoreText;
 
         private Vector3 velocity; // Direction x Speed
-        private int count;
+        private int score = 0;
 
         public void Fire(Vector3 direction)
         {
@@ -26,13 +26,18 @@ namespace Breakout
             Vector3 reflect = Vector3.Reflect(velocity, contact.normal);
             // Calculate new velocity from reflection multiply by the same speed (velocity.magnitude)
             velocity = reflect.normalized * velocity.magnitude;
+
+            if (other.gameObject.CompareTag("Block"))
+            {
+                score = score + 1;
+                UpdateScore();
+            }
         }
 
         // Use this for initialization
         void Start()
         {
-            count = 0;
-            SetCountText();
+
         }
 
         // Update is called once per frame
@@ -40,20 +45,12 @@ namespace Breakout
         {
             // Moves ballusing velocity & deltaTime
             transform.position += velocity * Time.deltaTime;
-        }
-        void OnTriggerEnter2D(Collider2D other)
-        {
-            if (other.gameObject.CompareTag("Ball"))
-            {
-                other.gameObject.SetActive(false);
-                count = count + 1;
-                SetCountText();
-            }
+            UpdateScore();
         }
 
-        void SetCountText()
+        void UpdateScore()
         {
-            countText.text = "Count: " + count.ToString();
+            scoreText.text = "Score: " + score;
         }
     }
 }
