@@ -8,37 +8,29 @@ namespace Billiards
     public class ScoreManager : MonoBehaviour
     {
         public Text scoreText;
-        public int scoreValue;
 
-        private int score;
+        private int score = 0;
 
         // Use this for initialization
         void Start()
         {
-            score = 0;
-            UpdateScore();
+
         }
 
         // Update is called once per frame
         void Update()
         {
-
+            UpdateScore();
         }
 
         void OnTriggerEnter(Collider other)
         {
             if (other.gameObject.CompareTag("Pocket"))
             {
-                Destroy(gameObject);
+                Destroy(other.gameObject);
                 score = score + 1;
                 UpdateScore();
             }
-        }
-
-        public void AddScore(int newScoreValue)
-        {
-            score += newScoreValue;
-            UpdateScore();
         }
 
         void UpdateScore()
