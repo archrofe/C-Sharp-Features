@@ -6,8 +6,9 @@ namespace Breakout
 {
     public class Paddle : MonoBehaviour
     {
-        public float movementSpeed = 20f;
+        public float movementSpeed = 100f;
         public Ball currentBall;
+        private bool ballInPlay;
         //Directions array defaults to two values
         public Vector2[] directions = new Vector2[]
         {
@@ -34,8 +35,9 @@ namespace Breakout
 
         void CheckInput()
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) && ballInPlay == false)
             {
+                ballInPlay = true;
                 Fire();
             }
         }

@@ -7,7 +7,7 @@ namespace Breakout
 {
     public class Ball : MonoBehaviour
     {
-        public float speed = 20f; // Speed at which the ball travels
+        public float speed = 80f; // Speed at which the ball travels
         public Text scoreText;
 
         private Vector3 velocity; // Direction x Speed
