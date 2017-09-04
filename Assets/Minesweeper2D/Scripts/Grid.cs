@@ -10,6 +10,7 @@ namespace Minesweeper2D
         public int width = 10;
         public int height = 10;
         public float spacing = .155f;
+        public float offset = .5f;
 
         private Tile[,] tiles;
 
@@ -35,9 +36,9 @@ namespace Minesweeper2D
                 for (int y = 0; y < height; y++)
                 {
                     // Store half size for later use
-                    Vector2 halfSize = new Vector2(width / 2.230216f, height / 2.214286f);
+                    Vector2 halfSize = new Vector2(width / 2, height / 2);
                     // Pivot tiles around Grid
-                    Vector2 pos = new Vector2(x - halfSize.x, y - halfSize.y);
+                    Vector2 pos = new Vector2(x - (halfSize.x - offset), y - (halfSize.y - offset));
                     // Apply spacing
                     pos *= spacing;
                     // Spawn the tile
@@ -66,12 +67,21 @@ namespace Minesweeper2D
             // Loop through all elements and have each axis go between -1 to 1
             for (int x = 0; x <= 1; x++)
             {
-                // Calculate desired coordinates from ones attained
-                int desiredX = t.x + x;
+                for (int y = 0; y < 1; y++)
+                {
+                    // Calculate desired coordinates from ones attained
+                    int desiredX = t.x + x;
+                    int desiredY = t.y + y;
 
-                // IF desiredX is within range of tiles array length
+                    // IF desiredX is within range of tiles array length
+                    if (desiredX < width && desiredY < height)
+                    {
+
+                    }
+
                     // IF the element at index is a mine
-                        // Increment count by 1
+                    // Increment count by 1
+                }
             }
             return count;
         }
