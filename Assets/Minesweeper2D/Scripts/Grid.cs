@@ -35,7 +35,7 @@ namespace Minesweeper2D
                 for (int y = 0; y < height; y++)
                 {
                     // Store half size for later use
-                    Vector2 halfSize = new Vector2(width / 2, height / 2);
+                    Vector2 halfSize = new Vector2(width / 2.230216f, height / 2.214286f);
                     // Pivot tiles around Grid
                     Vector2 pos = new Vector2(x - halfSize.x, y - halfSize.y);
                     // Apply spacing
