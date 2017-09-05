@@ -12,9 +12,6 @@ namespace LoopArrays
         public int spawnAmount = 1000;
         public float spawnRadius = 5f;
         public string message = "Print This";
-        private float printTime = 2f;
-
-        private float timer = 0;
 
         void OnDrawGizmos()
         {
