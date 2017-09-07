@@ -12,7 +12,6 @@ namespace Minesweeper2D
         public int y = 0;
         public bool isMine = false;     // Is the current tile a mine?
         public bool isRevealed = false; // Has the tile already been revealed?
-        public GameObject laserPoint;
         [Header("References")]
         public Sprite[] emptySprites;   // List of empty sprites i.e. empty, 1, 2, 3, 4, etc...
         public Sprite[] mineSprites;    // The mine sprites
@@ -46,22 +45,6 @@ namespace Minesweeper2D
             {
                 // Sets sprite to appropriate texture based on adjacent mines
                 rend.sprite = emptySprites[adjacentMines];
-            }
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            {
-                RaycastHit other;
-                if (Input.GetMouseButton(0))
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    if (Physics.Raycast(ray, out other))
-                    {
-                        Instantiate(laserPoint, other.point, Quaternion.identity);
-                    }
-                }
             }
         }
     }
