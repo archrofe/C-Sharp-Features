@@ -6,6 +6,17 @@ namespace Minesweeper2D
 {
     public class Grid : MonoBehaviour
     {
+        public enum MineState
+        {
+            LOSS = 0,
+            WIN = 1
+        }
+        public enum MouseButton
+        {
+            LEFT_MOUSE = 0,
+            RIGHT_MOUSE = 1,
+            MIDDLE_MOUSE = 2
+        }
         public GameObject tilePrefab;
         public int width = 10;
         public int height = 10;
@@ -63,6 +74,41 @@ namespace Minesweeper2D
             GenerateTiles();
         }
 
+        void Update()
+        {
+            // IF Mouse Button 0 is Down
+                // LET ray = Ray from Camera using Input.mousePosition
+                // LET hit = Physic2D RayCast (ray.origin, ray.direction)
+                // IF hit's collider != null
+                    // LET hitTile = hit collider's Tile component
+                    // IF hitTile != null
+                        // CALL SelectTile(hitTile)
+        }
+
+        // Update is called once per frame
+        void FixedUpdate()
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                if (hit.collider != null)
+                {
+                    // LET tile = hit collider's Tile component
+                    Tile t = hit.collider.GetComponent<Tile>();
+                    // IF tile != null
+                    if (t != null)
+                    {
+                        // LET adjacentMines = GetAdjacentMinesAt(tile)
+                        int adjacentMines = GetAdjacentMineCountAt(t);
+                        // CALL tile.Reveal(adjacentMines)
+                        t.Reveal(adjacentMines);
+                    }
+                }
+            }
+        }
+
+        // Count adjacent mines at element
         public int GetAdjacentMineCountAt(Tile t)
         {
             int count = 0;
@@ -91,27 +137,69 @@ namespace Minesweeper2D
             return count;
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        public void FFuncover(int x, int y, bool[,] visited)
         {
-            if (Input.GetMouseButtonDown(0))
+            // IF x >= 0 AND y >= 0 AND x < width AND y < height
+            if (x >= 0 && y >= 0 && x < width && y < height)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-                if (hit.collider != null)
-                {
-                    // LET tile = hit collider's Tile component
-                    Tile t = hit.collider.GetComponent<Tile>();
-                    // IF tile != null
-                    if (t != null)
-                    {
-                        // LET adjacentMines = GetAdjacentMinesAt(tile)
-                        int adjacentMines = GetAdjacentMineCountAt(t);
-                        // CALL tile.Reveal(adjacentMines)
-                        t.Reveal(adjacentMines);
-                    }
-                }
+                // IF visited[x, y]
             }
+            // RETURN
+
+            // Let tile = tiles[x, y]
+            // Let adjacentMines = GetAdjacentMineCountAt(tile
+            // CALL tile.Reveal(adjacentMines)
+
+            // IF adjacentMines > 0
+            // RETURN
+
+            // SET visited[x, y] = true
+
+            //CALL FFuncove(x - 1, y, visited)
+            //CALL FFuncove(x + 1, y, visited)
+            //CALL FFuncove(x, y - 1, visited)
+            //CALL FFuncove(x, y + 1, visited)
+        }
+
+        // Uncovers all minesthat are in the grid
+        public void UncoverMines(int mineState)
+        {
+            // FOR x = 0 to x < width
+                // FOR y = 0 to y < height
+                    // LET currentTile = tiles[x, y]
+                    // IF currentTile isMine
+                        // LET adjacentMines = GetAdjacentMineCountAt(currentTile)
+                        // Call currentTile.Reveal(adjacentMines, mineState)
+        }
+
+        // Detects if there are no more empty tiles in the game
+        bool NoMoreEmptyTiles()
+        {
+            // LET emptyTileCount = 0
+            int emptyTileCount = 0;
+            // FOR x = 0 to x < width
+            // FOR y = 0 to y < height
+            // LET currentTile = tiles[x, y]
+            // IF !currentTile.isRevealed AND !current.isMine
+            // SET emptyTileCount = emptyTileCount + 1
+            // RETURN emptyTileCount
+            return emptyTileCount == 0;
+        }
+
+        public void SelectTile(Tile selectedTile)
+        {
+            // LET adjacentMines = GetAdjacentMineCountAt(selectedTile)
+            // CALL selectedTile.Reveal(adjacentMines)
+            // IF selectedTile isMine
+                // CALL UncoverMines(0)
+                // [EXTRA] Perform Game over logic
+            // ELSEIF adjacentMines == 0
+                // LET x = selectedTile.x
+                // LET y = selectedTile.y
+                // CALL FFuncover(x, y, new bool[width, height])
+            // IF NoMoreEmptyTiles()
+                // CALL UncoverMines(1)
+                // [EXTRA] Perform Win logic
         }
     }
 }
