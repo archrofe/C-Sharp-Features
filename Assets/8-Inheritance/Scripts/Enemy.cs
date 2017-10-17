@@ -16,7 +16,7 @@ namespace Inheritance
 
         private float attackTimer = 0f;
         private NavMeshAgent nav;
-        private Rigidbody rigid;
+        public static Rigidbody rigid;
 
         void Awake()
         {
@@ -48,7 +48,7 @@ namespace Inheritance
 
         public virtual void Attack()
         {
-
+            print("Attack() called");
         }
     }
 }

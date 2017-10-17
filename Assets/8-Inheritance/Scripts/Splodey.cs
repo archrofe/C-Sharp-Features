@@ -17,18 +17,31 @@ namespace Inheritance
         public override void Attack()
         {
             // Start ignition timer
+            splosionTimer++;
             // If splosionTimer > splosionRate
+            if (splosionTimer > splosionRate)
+            {
                 // Call Explode()
+                Explode(transform.position);
+            }
         }
 
-        void Explode()
+        void Explode(Vector3 center)
         {
             // Perform Physics OverlapSphere with splosionRadius
-                // Loop through all hits
-                    // If player
-                        // Add impact force to rigidbody
-                    
+            Collider[] hitColliders = Physics.OverlapSphere(center, splosionRadius);
+            // Loop through all hits
+            foreach (Collider hitCol in hitColliders)
+            {
+                // If player
+                if (hitCol.gameObject.name == "Player")
+                {
+                    // Add impact force to rigidbody
+                    hitCol.GetComponent<Rigidbody>().AddExplosionForce(impactForce, center, splosionRadius);
+                }
+            }
             // Destroy self
+            Destroy(gameObject);
         }
     }
 }
