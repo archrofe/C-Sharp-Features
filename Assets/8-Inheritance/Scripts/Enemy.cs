@@ -11,44 +11,64 @@ namespace Inheritance
         public Transform target;
         public int health = 100;
         public int damage = 20;
+        public float attackDuration = 1f;
         public float attackRange = 2f;
         public float attackRate = .5f;
 
-        private float attackTimer = 0f;
-        private NavMeshAgent nav;
-        public static Rigidbody rigid;
+        protected NavMeshAgent nav;
+        protected Rigidbody rigid;
 
-        void Awake()
+        private float attackTimer = 0f;
+
+        protected virtual void Awake()
         {
             nav = GetComponent<NavMeshAgent>();
             rigid = GetComponent<Rigidbody>();
         }
 
-        void Update()
+        protected virtual void Attack() { }
+        protected virtual void OnAttackEnd() { }
+
+        IEnumerator AttackDelay(float delay)
         {
-            // Increase attack timer
-            attackTimer += Time.deltaTime;
-            // Get distance from enemy to target
-            float distance = Vector3.Distance(transform.position, target.position);
-            // IF distance < attack range
-            if (distance < attackRange)
+            // stop navigation
+            nav.Stop();
+            yield return new WaitForSeconds(delay);
+            if (nav.isOnNavMesh)
             {
-                // Call Attack()
-                Attack();
-                // Reset attack timer
-                attackTimer = 0f;
+                // resume navigation
+                nav.Resume();
             }
-            // IF target != null
-            if (target != null)
-            {
-                // Navigate to target
-                nav.SetDestination(target.position);
-            }
+            // CALL OnAttackEnd()
+            OnAttackEnd();
         }
 
-        public virtual void Attack()
+        protected virtual void Update()
         {
-            print("Attack() called");
+            // IF target != null
+            if (target == null)
+            {
+                return;
+            }
+            // Increase attack timer
+            attackTimer += Time.deltaTime;
+            if (attackTimer >= attackRate)
+            {
+                // Get distance from enemy to target
+                float distance = Vector3.Distance(transform.position, target.position);
+                // IF distance < attack range
+                if (distance < attackRange)
+                {
+                    // Call Attack()
+                    Attack();
+                    // Reset attack timer
+                    attackTimer = 0f;
+                    // StartCorountine for attack delay
+                    StartCoroutine(AttackDelay(attackDuration));
+                }
+            }
+                // Navigate to target
+                nav.SetDestination(target.position);
         }
     }
 }

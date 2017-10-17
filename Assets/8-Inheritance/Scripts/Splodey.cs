@@ -14,30 +14,43 @@ namespace Inheritance
 
         private float splosionTimer = 0f;
 
-        public override void Attack()
+        protected override void Update()
         {
-            // Start ignition timer
-            splosionTimer++;
+            base.Update();
+
+            splosionTimer += Time.deltaTime;
+        }
+
+        protected override void OnAttackEnd()
+        {
             // If splosionTimer > splosionRate
             if (splosionTimer > splosionRate)
             {
                 // Call Explode()
-                Explode(transform.position);
+                Splode();
             }
         }
 
-        void Explode(Vector3 center)
+        void Splode()
         {
             // Perform Physics OverlapSphere with splosionRadius
-            Collider[] hitColliders = Physics.OverlapSphere(center, splosionRadius);
+            Collider[] hits = Physics.OverlapSphere(transform.position, splosionRadius);
             // Loop through all hits
-            foreach (Collider hitCol in hitColliders)
+            foreach (var hit in hits)
             {
+                Health h = hit.GetComponent<Health>();
                 // If player
-                if (hitCol.gameObject.name == "Player")
+                if (h != null)
                 {
+                    h.TakeDamage(damage);
                     // Add impact force to rigidbody
-                    hitCol.GetComponent<Rigidbody>().AddExplosionForce(impactForce, center, splosionRadius);
+                    rigid.AddExplosionForce(impactForce, transform.position, splosionRadius);
+                }
+                Rigidbody r = hit.GetComponent<Rigidbody>();
+                if (r != null)
+                {
+                    Vector3 dir = hit.transform.position - transform.position;
+                    r.AddExplosionForce(impactForce, transform.position, splosionRadius);
                 }
             }
             // Destroy self

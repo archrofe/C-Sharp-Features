@@ -12,11 +12,18 @@ namespace Inheritance
 
         private Rigidbody rigidCharger;
 
-        public override void Attack()
+        protected override void Awake()
+        {
+            base.Awake();
+        }
+
+        protected override void Attack()
         {
             // Add force to self
-            Enemy.rigid.AddForce(-transform.forward * knockback);
+            rigid.AddForce(transform.forward * knockback);
         }
+
+
 
         void OnCollisionEnter(Collision col)
         {
