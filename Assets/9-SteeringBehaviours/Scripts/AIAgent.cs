@@ -25,7 +25,7 @@ namespace AI
         void ComputeForces()
         {
             // SET force = Vector3.zero
-            Vector3 force = Vector3.zero;
+            force = Vector3.zero;
 
             // FOR i := 0 to behaviours.Count
             for (int i = 0; i < behaviours.Count; i++)
@@ -69,7 +69,7 @@ namespace AI
             if (velocity.magnitude > 0)
             {
                 // SET transform.position = transform.position + velocity x deltaTime
-                transform.position = transform.position + velocity * Time.deltaTime;
+                transform.position += velocity * Time.deltaTime;
                 // SET transform.rotation = Quaternion LookRotation (velocity)
                 transform.rotation = Quaternion.LookRotation(velocity);
             }
